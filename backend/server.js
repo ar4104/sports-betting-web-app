@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -12,7 +13,8 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Initialize SQLite database
-const db = new sqlite3.Database('./backend/betting.db', (err) => {
+const dbPath = path.resolve(__dirname, 'betting.db');
+const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error('Error opening database:', err.message);
   } else {
