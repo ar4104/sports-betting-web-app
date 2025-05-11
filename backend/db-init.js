@@ -2,7 +2,7 @@ const { db } = require('./server');
 
 // Create tables for users, matches, bets, transactions
 db.serialize(() => {
-  db.run(`
+  db.run(\`
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       username TEXT UNIQUE,
@@ -10,9 +10,9 @@ db.serialize(() => {
       betcoins INTEGER DEFAULT 0,
       payeer_wallet TEXT
     )
-  `);
+  \`);
 
-  db.run(`
+  db.run(\`
     CREATE TABLE IF NOT EXISTS matches (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       sport TEXT,
@@ -24,9 +24,9 @@ db.serialize(() => {
       odds_draw REAL,
       result TEXT
     )
-  `);
+  \`);
 
-  db.run(`
+  db.run(\`
     CREATE TABLE IF NOT EXISTS bets (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER,
@@ -37,9 +37,9 @@ db.serialize(() => {
       FOREIGN KEY(user_id) REFERENCES users(id),
       FOREIGN KEY(match_id) REFERENCES matches(id)
     )
-  `);
+  \`);
 
-  db.run(`
+  db.run(\`
     CREATE TABLE IF NOT EXISTS transactions (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER,
@@ -48,7 +48,7 @@ db.serialize(() => {
       timestamp TEXT DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY(user_id) REFERENCES users(id)
     )
-  `);
+  \`);
 
   console.log('Database tables created or verified.');
   db.close();
