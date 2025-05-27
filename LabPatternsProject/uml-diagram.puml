@@ -1,0 +1,85 @@
+@startuml
+package com.labpatterns {
+
+  abstract class ProductComponent {
+    - name : String
+    + add(ProductComponent)
+    + remove(ProductComponent)
+    + show(depth : int)
+    + accept(visitor : Visitor)
+  }
+
+  class ProductLeaf {
+    - quantity : int
+    + add(ProductComponent)
+    + remove(ProductComponent)
+    + show(depth : int)
+    + accept(visitor : Visitor)
+  }
+
+  class ProductComposite {
+    - children : List<ProductComponent>
+    + add(ProductComponent)
+    + remove(ProductComponent)
+    + show(depth : int)
+    + accept(visitor : Visitor)
+  }
+
+  interface DeliveryBuilder {
+    + setSupplier(supplier : String)
+    + addProduct(product : ProductComponent)
+    + build() : ProductComposite
+  }
+
+  class StandardDeliveryBuilder {
+    - supplier : String
+    - products : List<ProductComponent>
+    + setSupplier(supplier : String)
+    + addProduct(product : ProductComponent)
+    + build() : ProductComposite
+  }
+
+  class WarehouseFacade {
+    + receiveDelivery(delivery : ProductComponent)
+    + showInventory()
+  }
+
+  class ProductFactory {
+    + createProduct(name : String, quantity : int) : ProductComponent
+  }
+
+  interface Visitor {
+    + visit(leaf : ProductLeaf)
+    + visit(composite : ProductComposite)
+  }
+
+  interface Visitable {
+    + accept(visitor : Visitor)
+  }
+
+  class ReportVisitor {
+    - report : StringBuilder
+    + visit(leaf : ProductLeaf)
+    + visit(composite : ProductComposite)
+    + getReport() : String
+  }
+
+  class Main {
+    + main(args : String[])
+  }
+
+  ProductComponent <|-- ProductLeaf
+  ProductComponent <|-- ProductComposite
+  DeliveryBuilder <|.. StandardDeliveryBuilder
+  ProductComponent ..|> Visitable
+  ReportVisitor ..|> Visitor
+
+  Main ..> ProductFactory
+  Main ..> ProductComponent
+  Main ..> ProductComposite
+  Main ..> DeliveryBuilder
+  Main ..> StandardDeliveryBuilder
+  Main ..> WarehouseFacade
+  Main ..> ReportVisitor
+}
+@enduml
